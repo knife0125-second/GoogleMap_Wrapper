@@ -5,36 +5,68 @@
     <style type="text/css">
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
+      div#contents {height: 100%;}
     </style>
+    <script src="js/vendor/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3&sensor=true">
     </script>
     <script type="text/javascript">
-      var map = {
+      var google_map = {
         canvas: null,
         map: null,
+        geocoder: new google.maps.Geocoder(),
         options: {
           center: new google.maps.LatLng(35.681382,139.766084),
           zoom: 16,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         },
-        create: function() {
-          var canvas = document.getElementById("map_canvas"),
-              options = this.options
+        initialize: function() {
+          var canvas = this.canvas,
+              options = this.options,
               map = new google.maps.Map(canvas, options);
 
-          this.canvas = canvas;
           this.map = map;
+        },
+        geocode: function (address) {
+          var geocoder = this.geocoder,
+              that = this;
+          geocoder.geocode({"address": address}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              var latlng = results[0].geometry.location;
+              that.map.setCenter(latlng);
+            } else {
+              alert("Geocode was not successful for the following reason: " + status);
+            }
+          });
+        },
+        reverse_geocode: function () {
+        },
+        create: function (elem) {
+          this.canvas = elem;
+          this.initialize();
+          return this;
         }
       };
 
-      document.addEventListener("DOMContentLoaded", function () {
-        map.create();
-      }, false);
-
+      $(function() {
+        var elem_map_canvas = $("#map_canvas")[0],
+            map_controller = google_map.create(elem_map_canvas);
+        $("#geocode").click(function () {
+          var address = $("#address").val();
+          map_controller.geocode(address);
+        });
+      });
     </script>
   </head>
   <body>
-    <div id="map_canvas" style="width:100%; height:100%"></div>
+    <div id="contents">
+      <div id="map_canvas" style="width:70%; height:100%; float: left;"></div>
+      <div id="sidebar" style="width:30%; height:100%; float: right; background-color: lightgray;">
+        <p>
+          <input id="address" type="text"/>
+          <input id="geocode" type="button" value="Geocode" />
+        </p>
+      </div>
+    </div>
   </body>
 </html>
