@@ -7,19 +7,31 @@
       body { height: 100%; margin: 0; padding: 0 }
       #map_canvas { height: 100% }
     </style>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3&sensor=true">
     </script>
     <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
+      var map = {
+        canvas: null,
+        map: null,
+        options: {
           center: new google.maps.LatLng(35.681382,139.766084),
           zoom: 16,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
-            mapOptions);
-      }
-      document.addEventListener("DOMContentLoaded", initialize, false);
+        },
+        create: function() {
+          var canvas = document.getElementById("map_canvas"),
+              options = this.options
+              map = new google.maps.Map(canvas, options);
+
+          this.canvas = canvas;
+          this.map = map;
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        map.create();
+      }, false);
+
     </script>
   </head>
   <body>
