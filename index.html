@@ -43,15 +43,6 @@
           return this;
         }
       };
-
-      $(function() {
-        var elem_map_canvas = $("#map_canvas")[0],
-            map_controller = google_map.create(elem_map_canvas);
-        $("#geocode").click(function () {
-          var address = $("#address").val();
-          map_controller.geocode(address);
-        });
-      });
     </script>
   </head>
   <body>
@@ -65,4 +56,14 @@
       </div>
     </div>
   </body>
+  <script type="text/javascript">
+    $(function() {
+      var elem_map_canvas = $("#map_canvas")[0],
+          map_controller = google_map.create(elem_map_canvas);
+      $("#geocode").click(function () {
+        var address = $("#address").val();
+        map_controller.geocode(address);
+      });
+    });
+  </script>
 </html>
