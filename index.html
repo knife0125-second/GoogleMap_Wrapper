@@ -6,44 +6,7 @@
     <script src="js/vendor/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3&sensor=true">
     </script>
-    <script type="text/javascript">
-      var google_map = {
-        canvas: null,
-        map: null,
-        geocoder: new google.maps.Geocoder(),
-        options: {
-          center: new google.maps.LatLng(35.681382,139.766084),
-          zoom: 16,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        },
-        initialize: function() {
-          var canvas = this.canvas,
-              options = this.options,
-              map = new google.maps.Map(canvas, options);
-
-          this.map = map;
-        },
-        geocode: function (address) {
-          var geocoder = this.geocoder,
-              that = this;
-          geocoder.geocode({"address": address}, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              var latlng = results[0].geometry.location;
-              that.map.setCenter(latlng);
-            } else {
-              alert("Geocode was not successful for the following reason: " + status);
-            }
-          });
-        },
-        reverse_geocode: function () {
-        },
-        create: function (elem) {
-          this.canvas = elem;
-          this.initialize();
-          return this;
-        }
-      };
-    </script>
+    <script type="text/javascript" src="js/googlemap_wrapper.js"></script>
   </head>
   <body>
     <div id="contents">
@@ -59,10 +22,9 @@
   <script type="text/javascript">
     $(function() {
       var elem_map_canvas = $("#map_canvas")[0],
-          map_controller = google_map.create(elem_map_canvas);
+          map_controller = google_map_wrapper.create(elem_map_canvas);
       $("#geocode").click(function () {
-        var address = $("#address").val();
-        map_controller.geocode(address);
+        map_controller.geocode($('#address').val());
       });
     });
   </script>
